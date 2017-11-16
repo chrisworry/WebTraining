@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="jquery.js" charset="utf-8"></script>
+    <script>
+        window.onload = function() {
+            document.getElementById('username').value = 'worry';
+            document.getElementById('password').value = '123456';
+
+            $('#btn-reg').click(()=>{
+                let username = $('#username').val();
+                let password = $('#password').val();    
+                $.ajax({
+                    url:`/reg?username=${username}&password=${password}`,
+                    dataType:'json',
+                    success(data) {
+                        if(data.code) {
+                            alert(`register failed: ${data.msg}`);
+                        } else {
+                            alert('register success.');
+                        }
+                    },
+                    error(err) {
+                        alert('net error');
+                    }
+                });
+            });
+
+            $('#btn-login').click(()=>{
+                let username = $('#username').val();
+                let password = $('#password').val();
+                $.ajax({
+                    url:`/login?username=${username}&password=${password}`,
+                    dataType:'json',
+                    success(data) {
+                        if (data.code) {
+                            alert(`login failed: ${data.msg}`);
+                        } else {
+                            alert(`login success`);
+                        }
+                    },
+                    error(err) {
+                        alert('net error');
+                    }
+                });
+            });
+
+        };
+    </script>
+</head>
+<body>
+    username: <input type="text" id="username"><br>
+    password: <input type="password" id="password"><br>
+    <input type="button" value="login" id="btn-login">
+    <input type="button" value="register" id="btn-reg">
+</body>
+</html>
