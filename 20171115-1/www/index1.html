@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="jquery.js" charset="utf-8"></script>
+    <script src="http://localhost:8080/socket.io/socket.io.js" charset="utf-8"></script>
+    <script>
+        window.onload = function() {
+            document.getElementById('username').value = 'worry';
+            document.getElementById('password').value = '123456';
+
+            let socket = io.connect('ws://localhost:8080');
+            socket.on('login_ret', (code,msg)=>{
+                if(code) {
+                    alert(`login failed: ${msg}`);
+                } else {
+                    alert('login success');
+                }
+            });
+
+            socket.on('reg_ret', (code,msg)=> {
+                if(code) {
+                    alert(`register failed: ${msg}`);
+                } else {
+                    alert('register success');
+                }
+            });
+
+            $('#btn-reg').click(()=>{
+                let username = $('#username').val();
+                let password = $('#password').val();   
+                socket.emit('reg',username,password); 
+
+            });
+
+            $('#btn-login').click(()=>{
+                let username = $('#username').val();
+                let password = $('#password').val();
+                socket.emit('login',username,password);
+            });
+
+        };
+    </script>
+</head>
+<body>
+    username: <input type="text" id="username"><br>
+    password: <input type="password" id="password"><br>
+    <input type="button" value="login" id="btn-login">
+    <input type="button" value="register" id="btn-reg">
+</body>
+</html>
