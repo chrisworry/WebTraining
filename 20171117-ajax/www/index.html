@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="jquery.js" charset="utf-8"></script>
+    <script>
+        window.onload = ()=>{
+
+            //原生AJAX的写法
+            document.getElementById('login-1').click = ()=>{
+                let username = document.getElementById('usr-1').value;
+                let password = document.getElementById('pwd-1').value;
+                let oAjax = new XMLHttpRequest();
+                oAjax.open('GET',`/login?username=${username}&password=${password}`);
+                oAjax.send()
+                oAjax.onreadystatechange =()=> {
+                    if(oAjax.readyState == 4) {
+                        if ((oAjax.status >= 200 && oAjax.status < 300) || oAjax.status == 304) {
+                            let {errCode,msg} = JSON.stringify(oAjax.responseText);
+                            if (errCode == 0) {
+                                alert(`success:${msg}`);
+                            }
+                        }
+                        
+                    }
+                }
+            };
+            
+        };
+    </script>
+</head>
+<body>
+    <p> 原生AJAX GET </p>
+    username<input type="text" id="usr-1"><br>
+    password<input type="password" id="pwd-1"><br>
+    <input type="button" value="login" id="login-1">
+
+</body>
+</html>

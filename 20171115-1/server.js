@@ -12,10 +12,8 @@ let db = mysql.createPool({
 });
 
 let httpServer = http.createServer((req,res)=> {
-    let aUrl = url.parse(req.url, true);
-    let pathname = aUrl.pathname;
-    let {username,password} = aUrl.query;
-
+    let {pathname,query} = url.parse(req.url, true);
+    let {username,password} = query;
     if (pathname == '/reg') {
         if(!username) {
             res.write('username is empty.');
