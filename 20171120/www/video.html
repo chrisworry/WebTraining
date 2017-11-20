@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        window.onload = ()=>{
+            document.getElementById('btn1').onclick = ()=>{
+                if(window.navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(res=>{
+                        alert('成功' + JSON.stringify(res.coords.latitude));
+                        console.log(res.coords);
+                    },err=>{ 
+                        alert('失败');
+                    },{enableHighAccuracy: true,timeout: 5000,maximumAge: 3000});
+                }
+            }
+
+        };
+    </script>
+</head>
+<body>
+    <video src="http://www.runoob.com/try/demo_source/movie.mp4" controls="controls"></video>    
+</body>
+</html>

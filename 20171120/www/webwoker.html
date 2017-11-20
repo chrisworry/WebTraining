@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        window.onload = ()=>{
+           document.getElementById('btn1').onclick = ()=>{
+            let n1 = parseInt(document.getElementById('text1').value);
+            let n2 = parseInt(document.getElementById('text2').value);
+
+            let woker = new Worker('http://localhost:8080/w1.js');
+            woker.postMessage({n1,n2});
+            woker.onmessage=(env)=>{
+                //alert(env.data);
+                document.getElementById('text3').value = env.data;
+            }
+           };
+
+        };
+    </script>
+</head>
+<body>
+    <input type="text" id="text1">+
+    <input type="text" id="text2">=
+    <input type="text" id="text3">
+    <input type="button" id="btn1" value="add">
+</body>
+</html>
