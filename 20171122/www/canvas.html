@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body {background: black}
+        #c1 {background: white}
+    </style>
+    <script>
+        window.onload = function() {
+            let oC = document.getElementById('c1');
+            let gd = oC.getContext('2d');//图形上下文——绘图接口 ‘2d’ 'webGL'
+            //路径操作 
+            // gd.beginPath();
+            // gd.moveTo(100,100);
+            // gd.lineTo(200,200);
+            // gd.lineTo(100,200);
+            // gd.strokeStyle = 'red';
+            // // gd.fillStyle = 'yellow';
+            // // gd.fill();
+            // gd.closePath();
+            // gd.stroke();
+
+            let down = false;
+            let lastX,lastY;
+            let r = 0;
+            let g = 125;
+            let b = 0;
+
+            oC.onmousedown = function(ev) {
+                down = true;
+                lastX = ev.offsetX;
+                lastY = ev.offsetY;
+            };
+
+            oC.onmousemove = function(ev) {
+                if (down) {
+                    gd.beginPath();
+                    gd.moveTo(lastX,lastY);
+                    gd.lineTo(ev.offsetX,ev.offsetY);
+                    gd.strokeStyle = `rgb(${r},${g},${b})`;
+                    r++;
+                    if (r == 255) {
+                        r = 0;
+                    }
+                    g++;
+                    if (g == 255) {
+                        g = 0;
+                    }
+                    b--;
+                    if (b < 0) {
+                        b = 255;
+                    }
+                    gd.stroke();
+                    lastX = ev.offsetX;
+                    lastY = ev.offsetY;
+                    gd.closePath();
+                }
+                
+            }
+
+            oC.onmouseup = function(ev) {
+                down = false;
+                //gd.closePath();
+               
+            }
+        };
+    </script>
+</head>
+<body>
+    <canvas id = "c1" width="512" height="512">
+        您的游览器并不支持canvas
+    </canvas>
+    
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="http://localhost:8080/socket.io/socket.io.js" charset="utf-8"></script>
+    <script src="jquery.js" charset="utf-8"></script>
+    <script>
+        window.onload =  function() {
+            $('#btn-register').click(function() {
+                let user = document.getElementById('username').value;
+                let password = document.getElementById('password').value;
+                $.ajax({
+                    url:`/reg?user=${user}&password=${password}`,
+                    dataType:'json',
+                    success(data) {
+                        if (data.code == 0) {
+                            alert('register failed: ' + data.msg);
+                        } else {
+                            alert('register success.');
+                        }
+                    },
+                    error(err) {
+                        alert('register failed: ' + err);
+                    }
+                });
+            });
+        }
+    </script>
+</head>
+<body>
+    username: <input type="text" id="username">
+    password: <input type="password" id="password">
+    <input type="button" value="login" id="btn-login">
+    <input type="button" value="register" id="btn-register">
+    
+</body>
+</html>

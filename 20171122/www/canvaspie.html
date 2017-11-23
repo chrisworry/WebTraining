@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        window.onload =  function() {
+
+            let arr = [100,123,123,35,352,123,535];
+            let color = ['red','green','blue','yellow','aquamarine','BlueViolet','Brown'];
+            let sum = 0;
+            for (let i=0;i<arr.length;++i) {
+                sum += arr[i];
+            }
+            
+            let oC = document.getElementById('c1');
+            let gd = oC.getContext('2d');
+            let w = 512;
+            let h = 512;
+            let r = 200;
+            let cx = 256;
+            let cy = 256;
+            let x0 = cx + r;
+            let y0 = cy;
+            let x1,y1;
+            let d = 0;
+            for (let i=0;i<arr.length;++i) {
+                let a0 = d/sum*2*Math.PI;
+                let a1 = (d+arr[i])/sum*2*Math.PI;
+                if (a1 < Math.PI) {
+                    y1 = cy + r*Math.abs(Math.sin(a1));
+                } else {
+                    y1 = cy - r*Math.abs(Math.sin(a1));
+                }
+                if (a1 < Math.PI/2 || a1 > Math.PI/2*3) {
+                    x1 = cx + r*Math.abs(Math.cos(a1));
+                } else {
+                    x1 = cx - r*Math.abs(Math.cos(a1));
+                }
+
+                gd.beginPath();
+                gd.moveTo(cx,cy);
+                gd.lineTo(x0,y0);
+                gd.arc(512/2,512/2,200,a0,a1,false);
+                d += arr[i];
+                gd.fillStyle = color[i];
+                gd.moveTo(x1,y1);
+                gd.lineTo(cx,cy)
+                gd.strokeStyle = 'black';
+                gd.lineWidth = 5;
+                gd.stroke();
+
+                gd.fillStyle = color[i];
+                gd.fill();
+                gd.closePath();
+
+                x0 = x1;
+                y0 = y1;
+            }
+            
+        };
+    </script>
+</head>
+<body>
+    <canvas id="c1" width="512" height="512">
+        
+    </canvas>
+    
+</body>
+</html>
