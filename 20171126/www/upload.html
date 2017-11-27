@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        window.onload = function() {
+            let oFile = document.getElementById('file1');
+            let oBtn = document.getElementById('btn1');
+
+            oBtn.onclick = function() {
+                let aFile = Array.from(oFile.files);
+                console.log(aFile);
+                if (aFile.length == 0) {
+                    return;
+                }
+
+                let formData = new FormData();
+                aFile.forEach(file=>{
+                    formData.append('f1',file);
+                });
+
+                let oAjax = new XMLHttpRequest();
+                
+                oAjax.upload.onload = function(ev) {
+                    alert('upload done.');                    
+                }
+
+                oAjax.upload.onprogress = function(ev) {
+                    console.log(ev);
+
+                }
+
+                oAjax.upload.onerror = function(ev) {
+                    alert('upload error.'); 
+                }
+
+                oAjax.open('POST', '/upload', true);
+
+                oAjax.send(formData);
+
+                oAjax.onreadystatechange = function(ev) {
+                    if (this.readyState == 4) {
+                        if ((this.status >=200 && this.status <300) || this.status == 304) {
+                            alert('success');
+                        }
+                    }
+
+                }
+            }
+            
+
+        };
+    </script>
+</head>
+
+<body>    
+    <meter max="100" min="0" value="0" id="meter"></meter> <br>
+    <input type="file" id="file1" multiple><br>
+    <input type="button" value="upload" id="btn1">
+</body>
+
+</html>
