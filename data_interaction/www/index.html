@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ajax test</title>
+    <style>
+        .dragbox{width:200px; height:200px; background: cyan; border: 5px solid black;}
+
+    </style>
+    <script>
+        window.onload = function() {
+            //////////////////////////////////////////////////////////////////
+            //native AJAX GET 
+            let oUsername = document.getElementById('username');
+            let oPassword = document.getElementById('password');
+
+            document.getElementById('register-native').onclick = function() {
+
+                const username = oUsername.value;
+                const password = oPassword.value;
+
+                let xhr = new XMLHttpRequest();
+
+                xhr.onerror = function(err) {
+                    console.log(`ajax error:${err}`);
+                };
+
+                xhr.open('GET', `/reg?username=${username}&password=${password}`, true);
+                //xhr.setRequestHeader('Content-type','application/x-www-four-urlencoded');
+                xhr.send(null);
+
+                xhr.onreadystatechange = function(data) {
+                    if (xhr.readyState == 4) {
+                        if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 404) {
+                            console.log('register success.');
+                        } else {
+                            console.log("register failed.");
+                        }
+                    }
+                }
+            };
+
+            document.getElementById('login-native').onclick = function() {
+                const username = oUsername.value;
+                const password = oPassword.value;
+
+                let xhr = new XMLHttpRequest();
+
+                xhr.onerror = function(err) {
+                    console.log(`ajax error:${err}`);
+                };
+
+                xhr.onopen('GET', `/login?username=${username}&password=${password}`, true);
+                xhr.send(null);
+
+                xhr.onreadystatechange = function(data) {
+                    if (xhr.readyState == 4) {
+                        if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 404) {
+                            console.log('register success.');
+                        } else {
+                            console.log("register failed.");
+                        }
+                    }
+                }
+
+            };
+
+
+
+
+
+            //////////////////////////////////////////////////////////////////
+            // native AJAX upload file
+            // FormData FE/Node
+            let oUpload = document.getElementById('btn-upload');
+            let oUpload2 = document.getElementById('btn-upload2');
+
+            function uploadFile(fileData) {
+                let xhr = new XMLHttpRequest();
+                xhr.upload.onerror = function(err) {
+                    console.log(`ajax error:${err}`);
+                };
+                xhr.upload.onload = function() {
+                    console.log('upload done.')
+                }
+                xhr.upload.onprogress = function(ev) {
+                    console.log(ev.total + ' ' + ev.loaded);
+                }
+                xhr.upload.onloadend = function(err) {
+                    console.log(`upload end:${err}`);
+                }
+
+                xhr.open('POST','/upload', true);
+
+                let formData = new FormData();
+                formData.set('file', fileData);
+                xhr.send(formData);
+
+                xhr.onreadystatechange = function(data) {
+                    if (xhr.readyState == 4) {
+                        if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 404) {
+                            console.log('upload success.');
+                        } else {
+                            console.log("upload failed.");
+                        }
+                    }
+                }
+            };
+            
+            oUpload.onclick = function() {
+                let oFile = document.getElementById('upload-file');
+                uploadFile(oFile.files[0]);
+
+                // let xhr = new XMLHttpRequest();
+                // xhr.upload.onerror = function(err) {
+                //     console.log(`ajax error:${err}`);
+                // };
+                // xhr.upload.onload = function() {
+                //     console.log('upload done.')
+                // }
+                // xhr.upload.onprogress = function(ev) {
+                //     console.log(ev.total + ' ' + ev.loaded);
+                // }
+                // xhr.upload.onloadend = function(err) {
+                //     console.log(`upload end:${err}`);
+                // }
+
+                // xhr.open('POST','/upload', true);
+
+                // let oFile = document.getElementById('upload-file');
+                // let data = new FormData();
+                // data.set('file', oFile.files[0]);
+                // xhr.send(data);
+
+                // xhr.onreadystatechange = function(data) {
+                //     if (xhr.readyState == 4) {
+                //         if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 404) {
+                //             console.log('upload success.');
+                //         } else {
+                //             console.log("upload failed.");
+                //         }
+                //     }
+                // }
+            };
+
+            oUpload2.onclick = function() {
+                let oFiles = document.getElementById('upload-files');
+                uploadFile(oFiles[0]);
+            };
+
+
+
+            //////////////////////////////////////////////////////////////////
+            // native AJAX drag file to upload
+            let oDivDragFile = document.getElementById('div-drag-file');
+            oDivDragFile.addEventListener('dragenter', function(ev) {
+               //oDivDragFile.innerHTML = "Release to upload file";   
+               console.log('enter');
+            });
+
+            oDivDragFile.addEventListener('dragover', function(ev) {
+               //oDivDragFile.innerHTML = "Release to upload file"; 
+               console.log('over');
+               ev.preventDefault();
+            });
+
+            oDivDragFile.addEventListener('dragleave', function(ev) {
+                //oDivDragFile.innerHTML = "Drag file to upload"; 
+            });
+
+            oDivDragFile.addEventListener('drop', function(ev) {
+                console.log('drop');
+                ev.preventDefault();
+                let files = ev.dataTransfer.files;
+                uploadFile(files[0]);
+            });
+
+            
+
+        }
+    </script>
+</head>
+
+<body>
+    <h1>Ajax Data Interaction</h1>
+    <h2>Ajax basic get/post</h2>
+    <div>
+        username:<input type="username" id="username"><br> password:
+        <input type="password" id="password">
+    </div>
+    <div>
+        native Ajax get :
+        <input type="button" value="register" id="register-native">
+        <input type="button" value="login" id="login-native">
+    </div>
+    <hr>
+    <h2>Ajax form data(open file)</h2>
+    <div>
+        <input type="file" id="upload-file"><br>
+        <input type="button" value="upload a file" id="btn-upload"><br><br>
+
+        <input type="file" id="upload-files" multiple="multiple"><br>
+        <input type="button" value="upload multiple file" id="btn-upload2"><br><br>
+    </div>
+    <hr>
+    <h2>Ajax form data(drag file)</h2>
+    <div class="dragbox" id="div-drag-file">
+        Drag file to upload
+    </div>
+</body>
+
+</html>
