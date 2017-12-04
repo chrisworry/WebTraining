@@ -7,7 +7,6 @@ const uuidv4 = require('uuid/v4');
 
 let httpServer = http.createServer((req, res) => {
     const {pathname,query} = url.parse(req.url, true);
-    let postData;
     const ext = path.extname(pathname);
     if (ext == '.css' || ext == '.js' || ext == '.html') {
         //static file
@@ -24,34 +23,67 @@ let httpServer = http.createServer((req, res) => {
 
     } else if (pathname == '/reg') {
         //GET interface register
-        const {
-            username,
-            password
-        } = query;
+        const {username,password} = query;
         console.log('In register interface.');
         console.log(query);
     } else if (pathname == '/login') {
         //GET interface login
-        const {
-            username,
-            password
-        } = query;
+        const {username,password} = query;
         console.log('In login interface.');
         console.log(query);
     } else if (pathname == '/upload') {
         //POST
+        let postData;
         req.on('data', (chunk) => {
             postData += chunk;
         });
 
         req.on('end', () => {
             //write to file
+            //注意要去掉 ------WebKitFormBoundary 包住的头尾
             let uid = uuidv4();
-            //postData = querystring.parse(postData);
-            //console.log(postData);
-            let a = postData.search(/\n\n/);
-            fs.writeFileSync(`www/${uid}`,postData.slice(0),{encoding:'utf-8'});
-            postData = null;
+            let start = postData.search(/\r\n\r\n/);
+            postData = postData.slice(start+4);
+            let end = postData.search(/------WebKitFormBoundary/);
+            postData = postData.slice(0,end-2);
+            fs.writeFile(`www/upload/${uid}.txt`,postData,{encoding:'utf-8'}, err=>{
+                if(err) {
+                    res.writeHead(500);
+                    res.write('write file failed.');
+                } else {
+                    res.write('server upload success.');
+                }
+                res.end();
+                postData = null;
+            });
+        });
+    } else if (pathname == '/upload_base64') {
+        //POST
+        let imgData;
+        req.on('data', (chunk) => {
+            imgData += chunk;
+        });
+
+        req.on('end', () => {
+            //write to file
+            //注意要去掉 ------WebKitFormBoundary 包住的头尾
+            let uid = uuidv4();
+            let start = imgData.search(/\r\n\r\n/);
+            imgData = imgData.slice(start+4);
+            let end = imgData.search(/------WebKitFormBoundary/);
+            imgData = imgData.slice(0,end-2);
+
+            imgData=imgData.replace(/data:[a-z\-]+(\/[a-z\-]+)?;base64,/i, '');
+            fs.writeFile(`www/upload/${uid}.image`,imgData,'base64', err=>{
+                if(err) {
+                    res.writeHead(500);
+                    res.write('write file failed.');
+                } else {
+                    res.write('server upload success.');
+                }
+                res.end();
+                imgData = null;
+            });
         });
     }
 
