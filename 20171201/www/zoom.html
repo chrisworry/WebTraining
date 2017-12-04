@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,user-scalable=no">
+    <title>Document</title>
+    <style>
+        body {
+            text-align: center
+        }
+
+        .box {
+            background: red;
+            text-align: center;
+            width: 200px;
+            height: 200px;
+            border: 1px solid #F00;
+            transform: rotate(45deg)
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            let oDiv = document.getElementById('div1');
+
+            oDiv.addEventListener('touchstart', function (ev) {
+                if (ev.targetTouches.length >= 2) {
+                    //两个手指 
+                    let a = ev.targetTouches[0].clientX - ev.targetTouches[1].clientX;
+                    let b = ev.targetTouches[0].clientY - ev.targetTouches[1].clientY;
+                    let dis = Math.sqrt(a*a + b*b);
+                    ev.preventDefault();
+                    let w = oDiv.offsetWidth;
+                    let h = oDiv.offsetHeight;
+
+                    function fnMove(ev) {
+                        if (ev.targetTouches.length >= 2) {
+                            ev.preventDefault();
+
+                            let a = ev.targetTouches[0].clientX - ev.targetTouches[1].clientX;
+                            let b = ev.targetTouches[0].clientY - ev.targetTouches[1].clientY;
+                            let dis2 = Math.sqrt(a*a + b*b);
+                            let w1 = dis2/dis *w;
+                            let h1 = dis2/dis *h;
+                            oDiv.style.width = w1+'px';
+                            oDiv.style.height = h1+'px';
+                        }
+                    }
+
+                    function fnEnd() {
+                        oDiv.removeEventListener('touchmove', fnMove, false);
+                        oDiv.removeEventListener('touchend', fnEnd, false);
+                    }
+
+                    oDiv.addEventListener('touchmove', fnMove, false);
+                    oDiv.addEventListener('touchend', fnEnd, false);
+                }
+            });
+
+
+
+        };
+    </script>
+</head>
+
+<body>
+    <div class="box" id="div1">
+        文字文字文字
+    </div>
+</body>
+
+</html>

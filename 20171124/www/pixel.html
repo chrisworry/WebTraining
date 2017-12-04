@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body {background: black; text-align: center}
+        #c1 {background: white}
+    </style>
+    <script>
+        window.onload = function() {
+
+            let oC = document.getElementById('c1');
+            let gd = oC.getContext('2d');
+            let img = new Image();
+            img.src = 'pic.jpg';
+            img.onload = function() {
+                gd.drawImage(img,0,0,oC.width,oC.height);
+                let imgData =gd.getImageData(0,0,oC.width,oC.height);
+                for (let x=0; x<oC.width; ++x) {
+                    for (let y=0; y<oC.height; ++y) {
+                        let v = 0;
+                        for (let i=0;i<4;++i) {
+                            v += imgData.data[(y*oC.width + x)*4+ i];
+                        }
+                        v/=4;
+                        for (let i=0;i<4;++i) {
+                            imgData.data[(y*oC.width + x)*4 + i] = v;
+                        }
+                    }
+                }
+                gd.putImageData(imgData,0,0);
+                // let url = oC.toDataURL();
+                // console.log(url);
+            }
+
+        };
+    </script>
+</head>
+<body>
+    <canvas id="c1" width="1366px" height="768px"></canvas>
+</body>
+</html>

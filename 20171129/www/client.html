@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,user-scalable=no">
+    <title>Document</title>
+    <script>
+        window.onload = function() {
+            //2 connect to server
+            let ws = new WebSocket('ws://localhost:8080/');
+            ws.onopen = function() {
+                //ws.send('ABC');
+                let buf = new ArrayBuffer(4);
+                ws.send(buf)
+                alert('connected');
+            }
+            ws.onmessage = function() {
+                alert('message');
+            };
+            ws.onclose = function() {
+                alert('close');
+            };
+            ws.onerror =function() {
+                alert('error');
+            };
+
+        };
+    </script>
+</head>
+
+<body>    
+    HELLO NET
+</body>
+
+</html>

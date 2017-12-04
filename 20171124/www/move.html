@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body {background: black; text-align: center}
+        #c1 {background: white}
+    </style>
+    <script>
+        window.onload = function() {
+
+            //rect
+            let curColor = 'black';
+            let rect = {x0:1,y0:1,w:50,h:50};
+            let oC = document.getElementById('c1');
+            let gd = oC.getContext('2d');
+            setInterval(function() {
+                gd.clearRect(0,0,oC.width,oC.height);
+                gd.strokeStyle = curColor;
+                gd.strokeRect(rect['x0'],rect['y0'],rect['w'],rect['h']);
+                rect['x0'] += 1;
+                if (rect['x0'] == oC.width) {
+                    rect['x0'] = 0;
+                }
+
+            },10);
+
+            oC.onmousedown = function(ev) {
+                let x = ev.offsetX;
+                let y = ev.offsetY;
+                if (x >= rect['x0'] && y > rect['y0'] && 
+                x < rect['x0']+rect['w'] && y < rect['y0']+rect['h']) {
+                    curColor = 'yellow';
+                } else {
+                    curColor = 'black';
+                }
+            }
+
+            oC.onmousemove = function (ev) {
+                let x = ev.offsetX;
+                let y = ev.offsetY;
+                if (x >= rect['x0'] && y > rect['y0'] && 
+                x < rect['x0']+rect['w'] && y < rect['y0']+rect['h']) {
+                    curColor = 'yellow';
+                } else {
+                    curColor = 'black';
+                }
+            }
+
+
+        };
+    </script>
+</head>
+<body>
+    <canvas id="c1" width="600px" height="600px"></canvas>
+</body>
+</html>

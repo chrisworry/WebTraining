@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body {background: black; text-align: center}
+        #c1 {background: white}
+    </style>
+    <script>
+        window.onload = function() {
+
+            let oC = document.getElementById('c1');
+            let gd = oC.getContext('2d');    
+            
+            //简易版
+            // let img = new Image();
+            // img.src = 'mine.png';
+            // img.onload = function() {
+            //     gd.drawImage(img,100,100);
+            // }
+            
+
+            //完整版
+            // drawImage(img,
+            // sx,sy,sw,sh, //source
+            // dx,dy,dw,dh) //destination
+
+            let img = new Image();
+            img.src = 'move.jpg';
+            img.onload = function() {
+                let subW = 85;
+                let subH = 128;
+                let frame = 0;
+
+                let dir = 'l';
+                let posX = 100;
+                let posY = 100;
+                let keys={37:'l',38:'u',39:'r',40:'d'};
+                let speed = 10;
+            
+                setInterval(function() {
+                    gd.clearRect(0,0,oC.width,oC.height);
+                    
+                    frame ++;
+                    if (frame == 4) {
+                        frame = 0;
+                    }
+                    if (dir == 'l') {
+                        posX -= speed;
+                        gd.drawImage(img , frame*subW,subH, subW,subH,posX,posY,subW,subH);
+                    } else if (dir =='r') {
+                        posX += speed;
+                        gd.drawImage(img , frame*subW,subH*2, subW,subH,posX,posY,subW,subH);
+                    } else if (dir == 'u') {
+                        posY -= speed;
+                        gd.drawImage(img , frame*subW,subH*3, subW,subH,posX,posY,subW,subH);
+                    } else {
+                        posY += speed;
+                        gd.drawImage(img , frame*subW,0, subW,subH,posX,posY,subW,subH);
+                    }
+                },200); 
+            }
+            
+            window.onkeydown = function(ev) {
+                dir = keys[ev.keyCode] || dir;
+            }
+
+
+        };
+    </script>
+</head>
+<body>
+    <canvas id="c1" width="600px" height="600px"></canvas>
+</body>
+</html>

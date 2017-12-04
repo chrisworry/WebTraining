@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body {background: black; text-align: center}
+        #c1 {background: white}
+    </style>
+    <script>
+        window.onload = function() {
+
+            let oC = document.getElementById('c1');
+            let gd = oC.getContext('2d');
+
+            let angle = 0;
+            setInterval(function(ev) {
+                angle += 1;
+                if (angle == 360) {
+                    angle = 0;
+                }
+                gd.save();
+                gd.clearRect(0,0,oC.width,oC.height)
+                gd.translate(200+25,200+25);
+                gd.rotate(angle/360*2*Math.PI);
+                gd.translate(-(200+25),-(200+25));
+                gd.strokeRect(200,200,50,50);
+                gd.restore();
+            },50);
+            
+
+
+        };
+    </script>
+</head>
+<body>
+    <canvas id="c1" width="600px" height="600px"></canvas>
+</body>
+</html>
