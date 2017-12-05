@@ -80,14 +80,30 @@
             let oUpload = document.getElementById('btn-upload');
             let oUpload2 = document.getElementById('btn-upload2');
 
+            function updateProgress(v) {
+                document.getElementById('m1').value = v;
+            }
+
             oUpload.onclick = function () {
                 let oFile = document.getElementById('upload-file');
-                upload(oFile);
+                upload(oFile,function(err, res) {
+                    if(err) {
+                        console.log('upload failed: ' , err);
+                    } else {
+                        console.log('upload success: ' , res);
+                    }
+                },updateProgress) ;
             };
 
             oUpload2.onclick = function () {
                 let oFiles = document.getElementById('upload-files');
-                upload(oFiles);
+                upload(oFiles,function(err, res) {
+                    if(err) {
+                        console.log('upload failed: ' , err);
+                    } else {
+                        console.log('upload success: ' , res);
+                    }
+                },updateProgress) ;
             };
 
             //////////////////////////////////////////////////////////////////
@@ -111,7 +127,13 @@
             oDivDragFile.addEventListener('drop', function (ev) {
                 console.log('drop');
                 ev.preventDefault();
-                upload(ev.dataTransfer);
+                upload(ev.dataTransfer,function(err, res) {
+                    if(err) {
+                        console.log('upload failed: ' , err);
+                    } else {
+                        console.log('upload success: ' , res);
+                    }
+                },updateProgress) ;
             });
 
 
@@ -136,6 +158,7 @@
     </div>
     <hr>
     <h2>Ajax form data to upload file</h2>
+    <meter style="width:400px;" value="0" min="0" max="100" id="m1"></meter><br><br>
     <div>
         <input type="file" id="upload-file">
         <br>
