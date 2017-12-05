@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <!-- <script src="js/iscroll.js" charset="utf-8"></script> -->
+    <script src="js/iscroll-probe.js" charset="utf-8"></script>
+    <style media="screen">
+        .wrap {
+            width: 300px;
+            height: 300px;
+            background: #CCC;
+            overflow: hidden;
+            margin: 50px auto 0;
+            position: relative
+        }
+
+        .content {
+            width: 800px;
+            height: 800px;
+            background: -webkit-linear-gradient(left top, red, green);
+            position: relative;
+            z-index: 2
+        }
+
+        .dropdown {
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 1;
+            text-align: center;
+            width: 100%;
+            line-height: 30px;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            let iscroll = new IScroll('.wrap', { // wrap的第一个children是可以被拖动的元素
+                bounce: true, //是否允许移除父级范围
+                bounceTime: 1000, // 出去后返回边界的动画事件（transition）
+                scrollX: true, //X方向滚动
+                scrollY: true, //Y方向滚动
+                freeScroll: true, //自由滚动，取消方向锁定
+                mouseWheel: true,
+                mouseWheelSpeed: 20, //鼠标滚动速度
+                momentum: false, //物理引擎，关闭可以极大提高性能
+                directionLockThreshold: 10, //方向锁阈值
+                resizePolling: 60, //下拉刷新时间
+                invertWheelDirection: 1, //鼠标滚轮反转
+                startX: 10, //初始滚动到的位置
+                startY: 10, //初始滚动到的位置
+                probeType: 3, // 监视拖动过程方式：
+                //1 优先级最低，定时器监控； 
+                //2 优先级高，touchmove/mousemove/pointmove监控； 
+                //3 优先级极高高，放弃了transition，直接用js实现动画（request）（性能低）  
+            });
+            //事件(注意后面没有冒泡) on来添加事件 off删除事件
+            //brforeScrollStart 刚touch，还没拖动
+            //scrollStart 第一次移动
+            //scroll 滚动过程中(scroll-probe.js才有)
+            //srollEnd 滚动结束
+            //scrollCancel 滚动并未发生（按下去原地抬起来）
+            //flick 扫动
+            //zoomStart 缩放开始
+            //zoomEnd 缩放结束
+            // iscroll.on('beforeScrollStart', function() {
+            //     console.log('before start');
+            // });;
+
+            // iscroll.on('scrollStart', function() {
+            //     console.log('start');
+            // });;
+
+            // iscroll.on('scroll', function() {
+            //     console.log('scroll');
+            // });;
+
+            // iscroll.on('scrollEnd', function() {
+            //     console.log('end');
+            // });;
+
+            // iscroll.on('scrollCancel', function() {
+            //     console.log('cancel');
+            // });;
+            // console.log(iscroll.options);
+
+
+            //下拉刷新
+            let scrollYBeforeRelease = 0;
+            let dropdown = document.querySelector('.dropdown');
+            iscroll.on('scroll', function () {
+                console.log('scroll');
+                if(iscroll.endTime == 0) {
+                    console.log('tuodong');
+                } else {
+                    console.log('donghua');
+                }
+                if (iscroll.y > 100) {
+                    dropdown.innerHTML = '松手刷新';
+                } else {
+                    dropdown.innerHTML = '下拉刷新';
+                }
+                scrollYBeforeRelease = iscroll.y;
+            });
+
+            iscroll.on('scrollStart', function() {
+                scrollYBeforeRelease = 0;
+                iscroll.endTime = 0;
+            });
+
+            //进入动画后iscroll.endTime 不是0
+
+            iscroll.on('scrollEnd', function () {
+                if (scrollYBeforeRelease > 100) {
+                    alert('刷新');
+                } else {
+                    alert('不刷新');
+                }
+            });
+
+            console.log(iscroll.options);
+
+            //iscroll.scrollTo 在非动画状态能直接拖动到一个位置
+        }
+    </script>
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="content"></div>
+        <div class="dropdown">下拉刷新</div>
+    </div>
+</body>
+
+</html>

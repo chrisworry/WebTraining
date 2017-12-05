@@ -58,7 +58,7 @@
                     console.log(`ajax error:${err}`);
                 };
 
-                xhr.onopen('GET', `/login?username=${username}&password=${password}`, true);
+                xhr.open('GET', `/login?username=${username}&password=${password}`, true);
                 xhr.send(null);
 
                 xhr.onreadystatechange = function (data) {
