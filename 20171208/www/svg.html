@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        window.onload = function () {
+            let oSVG = document.getElementById('svg1');
+            let oBtn = document.getElementById('btn1');
+
+            oBtn.onclick = function () {
+                //let oLine = document.createElement('line'); //=> document.createElementNS('http://www.w3.org/1999/html','div');
+                let oLine = document.createElementNS('http://www.w3.org/2000/svg','line');
+                oLine.setAttribute('x1',100);
+                oLine.setAttribute('y1',100);
+                oLine.setAttribute('x2',400);
+                oLine.setAttribute('y2',500);
+                oLine.style.stroke = 'red';
+
+                oSVG.appendChild(oLine);
+            }
+
+        }
+    </script>
+    <style>
+    </style>
+</head>
+
+<body>
+    <input type="button" id="btn1" value="create">
+    <svg width="800" height="800" style="border:1px solid black" id="svg1">
+        //cx cy x-axis-rotation large-arc-flag sweep-flag x y
+        <path d="
+        M 100,400
+        L 200,400
+        A 100 100 0 0 1 400 400
+        L 500,400
+        " style="stroke:red; fill:none "></path>
+    </svg>
+
+</body>
+
+</html>

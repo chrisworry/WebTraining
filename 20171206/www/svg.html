@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        window.onload = function() {
+            let oC = document.getElementById('c1');
+            let content = oC.getContent('2d');
+
+            gd.beginPath();
+            gd.moveTo(300,300);
+            gd.lineTo(300,300);
+            gd.strokeStyle = ""
+        }
+    </script>
+</head>
+<body>
+    <svg width="800" height="800" style="border:1px solid black">
+        <line x1="300" y1="300" x2="400" y2="400" style="stroke:black"></line>
+    </svg>
+    <canva width="800" height="800" style="border:1px solid black" id="c1">
+    </canva>
+</body>
+</html>

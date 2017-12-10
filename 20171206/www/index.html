@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="js/hammer.js" charset="utf-8"></script>
+    <title>hammer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none
+        }
+
+        /* .box {
+            width: 200px;
+            height: 200px;
+            background: #CCC;
+            margin: 50px auto 0
+        } */
+
+        #ul1 li {
+            height: 30px;
+            position: relative;
+            border: 1px solid black;
+        }
+
+        #ul1 li .content {
+            position: absolute;
+            z-index: 2;
+            line-height: 30px;
+            width: 100%;
+            transition: 0.3s all ease;
+        }
+
+        #ul1 li .btns {
+            position: absolute;
+            z-index: 1;
+            right: 0;
+            top: 0;
+            line-height: 30px;
+        }
+    </style>
+
+    <script>
+        window.onload = function () {
+            let aLi = document.querySelectorAll('#ul1 li');
+            Array.from(aLi).forEach(li => {
+                let hammer = new Hammer(li, {});
+
+                //快速点击事件 < 250ms
+                hammer.on('tap', function () {
+                    console.log('轻点');
+                });
+
+                //长按 > 250ms
+                hammer.on('press', function () {
+                    console.log('长按');
+                });
+
+                //快速拖动的话即有pan 也有 swipe
+                //应用：左滑 出现删除标记
+
+                //快速滑动
+                hammer.on('swipeleft', function () {
+                    let oContent = li.children[0];
+                    oContent.style.transform = 'translateX(-100px)';
+                });
+
+                hammer.on('swiperight', function () {
+                    let oContent = li.children[0];
+                    oContent.style.transform = 'translateX(0px)';
+                });
+
+                //拖拽
+                hammer.on('pan', function () {
+                    console.log('拖拽');
+                });
+
+            })
+
+
+
+
+
+
+
+        }
+    </script>
+</head>
+
+<body>
+    <div class="box">
+        <ul id="ul1">
+            <li>
+                <div class="content">短信1</div>
+                <div class="btns">
+                    <a href="#">已读</a>
+                    <a href="#">删除</a>
+                </div>
+            </li>
+            <li>
+                <div class="content">短信1</div>
+                <div class="btns">
+                    <a href="#">已读</a>
+                    <a href="#">删除</a>
+                </div>
+            </li>
+            <li>
+                <div class="content">短信1</div>
+                <div class="btns">
+                    <a href="#">已读</a>
+                    <a href="#">删除</a>
+                </div>
+            </li>
+            <li>
+                <div class="content">短信1</div>
+                <div class="btns">
+                    <a href="#">已读</a>
+                    <a href="#">删除</a>
+                </div>
+            </li>
+        </ul>
+
+    </div>
+</body>
+
+</html>

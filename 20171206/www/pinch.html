@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="js/hammer.js" charset="utf-8"></script>
+    <title>hammer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none
+        }
+
+        .box {
+            width: 200px;
+            height: 200px;
+            background: #CCC;
+            margin: 50px auto 0
+        }
+    </style>
+
+    <script>
+        window.onload = function () {
+            let oDiv = document.querySelector('.box');
+            let hammer = new Hammer(oDiv,{});
+            let obj = hammer.get('pinch');
+            obj.set({enable:true});
+
+            let obj2 = hammer.get('rotate');
+            obj2.set({enable:true});
+
+            hammer.on('pinchstart', function(ev) {
+                
+            });
+
+            hammer.on('pinchmove', function(ev) {
+                //oDiv.innerHTML = ev.scale;
+                oDiv.style.transform=`scale(${ev.scale})`;
+                oDiv.style.transform=`rotate(${ev.rotation}deg)`;
+            });
+
+            hammer.on('pinchend', function(ev) {
+
+            });
+
+            hammer.on('rotatetart', function(ev) {
+                
+            });
+
+            hammer.on('rotatemove', function(ev) {
+                oDiv.innerHTML = ev.rotation;
+                oDiv.style.transform=`scale(${ev.scale})`;
+                oDiv.style.transform=`rotate(${ev.rotation}deg)`;
+            });
+
+            hammer.on('rotateend', function(ev) {
+                //oDiv.style.transform=`rotate(0deg)`;
+            });
+
+
+
+
+
+
+
+        }
+    </script>
+</head>
+
+<body>
+    <div class="box">
+    </div>
+    hehehe
+</body>
+
+</html>
