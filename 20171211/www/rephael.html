@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="js/raphael.js" charset="utf-8"></script>
+    <script>
+        window.onload = function() {
+            let paper = Raphael(0,0,800,800);
+            //图形
+            let rect = paper.rect(400,400,200,200);
+            rect.attr('fill','rgba(250,0,0,0.5)');
+            //事件
+            function fnClick() {
+                
+                //this.attr('fill','rgba(250,250,0,0.5)');
+                //this.attr({fill:'red',width:200,height:100});
+                //this.unClick(fnClick);
+                //this.attr("transform","s2r45");
+                //this.animate({"transform":"s2r45"},5000,'linear');
+                // this.animate({"transform":"s2r45"},5000,'easeIn');
+                // this.animate({"transform":"s0.5r45"},5000,'easeOut');
+                // this.animate({"transform":"s2r45"},5000,'easeInOut');
+                // this.animate({"transform":"s0.5r45"},5000,'backIn');
+                this.animate({"transform":"s2r45"},5000,'backOut');
+                //this.animate({"transform":"s0.5r45"},5000,'elastic');
+                //this.animate({"transform":"s2r45"},5000,'bounce');
+            }
+            rect.click(fnClick);
+
+            rect.hover(function() {
+                this.attr({fill:'rgba(250,0,0,1)'});
+            },function() {
+                this.attr({fill:'rgba(250,0,0,0.5)'});
+            });
+            // rect.unhover(function() {
+            //     this.attr({fill:'rgba(250,0,0,0.5)'});
+            // });
+
+        };
+    </script>
+</head>
+<body>
+    <!-- <svg width="800" height="800" id="svg1"></svg> -->
+    
+</body>
+</html>
