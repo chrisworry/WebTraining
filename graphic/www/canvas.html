@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .box {width:500px; height:500px; margin:30px; padding:0; border: 2px solid black;}
+    </style>
+    <script>
+        
+
+        window.onload = function() {
+            let oCanvasPaint = document.getElementById('canvas-paint');
+            let oCanvasPaintContext = oCanvasPaint.getContext('2d');
+            let painterOn = false;
+            let lastX,lastY;
+            oCanvasPaint.addEventListener('mousedown', function(ev) {
+                painterOn = true;
+                lastX = ev.offsetX;
+                lastY = ev.offsetY;
+
+                console.log('down');
+                
+            },false);
+
+            oCanvasPaint.addEventListener('mousemove', function(ev) {
+                if (painterOn) {
+                    oCanvasPaintContext.beginPath();
+                    oCanvasPaintContext.strokeStyle='rgb(255,0,0,0.5)';
+                    oCanvasPaintContext.lineWidth = 2;
+                    oCanvasPaintContext.moveTo(lastX, lastY);
+                    oCanvasPaintContext.lineTo(ev.offsetX, ev.offsetY);
+                    oCanvasPaintContext.stroke();
+                    lastX = ev.offsetX;
+                    lastY = ev.offsetY;
+
+                    console.log('paint');
+                }
+            },false);
+
+            oCanvasPaint.addEventListener('mouseup', function(ev) {
+                painterOn = false;
+                console.log('end');
+            },false);
+            
+
+            
+            document.getElementById('btn-clean').onclick = function () {
+                oCanvasPaintContext.clearRect(0, 0, oCanvasPaint.offsetHeight, oCanvasPaint.offsetHeight);
+            }
+
+
+            //全局的mouse
+            window.addEventListener('mouseup', function() {
+                painterOn= false;
+            },false);
+        };
+    </script>
+</head>
+<body>
+    <h2>Canvas Freehand</h2>
+    <div class="panel">
+        <input type="button" value="clean" id="btn-clean">
+        <input type="button" value="四边形">
+        <input type="button" value="四边形">
+
+    </div>
+    <div class="box">
+        <canvas width="500" height="500" id="canvas-paint">
+        </canvas>
+    </div>
+    <div class="box">
+        <canvas width="500" height="500" id="canvas2">
+        </canvas>
+    </div>
+</body>
+</html>
