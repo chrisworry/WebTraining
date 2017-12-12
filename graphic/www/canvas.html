@@ -1,79 +1,221 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <style>
-        .box {width:500px; height:500px; margin:30px; padding:0; border: 2px solid black;}
+        .box {
+            width: 800px;
+            height: 800px;
+            margin: 0px;
+            padding: 0;
+            border: 2px solid black;
+        }
+
+        .btn-group {
+            background: rgba(231, 227, 227, 0.8)
+        }
+
+        .btn-success {
+            background: rgba(119, 118, 116, 0.8)
+        }
     </style>
+    <script src="js/jquery.js" charset="utf-8"></script>
+    <script src="js/canvas-graphic.js" charset="utf-8"></script>
     <script>
-        
-
         window.onload = function() {
-            let oCanvasPaint = document.getElementById('canvas-paint');
-            let oCanvasPaintContext = oCanvasPaint.getContext('2d');
-            let painterOn = false;
-            let lastX,lastY;
-            oCanvasPaint.addEventListener('mousedown', function(ev) {
-                painterOn = true;
-                lastX = ev.offsetX;
-                lastY = ev.offsetY;
 
-                console.log('down');
-                
-            },false);
+            let canvas = document.getElementById('canvas-paint');
+            let cxt = canvas.getContext('2d');
+            let painting = false;
 
-            oCanvasPaint.addEventListener('mousemove', function(ev) {
-                if (painterOn) {
-                    oCanvasPaintContext.beginPath();
-                    oCanvasPaintContext.strokeStyle='rgb(255,0,0,0.5)';
-                    oCanvasPaintContext.lineWidth = 2;
-                    oCanvasPaintContext.moveTo(lastX, lastY);
-                    oCanvasPaintContext.lineTo(ev.offsetX, ev.offsetY);
-                    oCanvasPaintContext.stroke();
-                    lastX = ev.offsetX;
-                    lastY = ev.offsetY;
+            //shape container
+            let shapeContainer = new ShapeContainer(canvas);
+            let shapeType = '';
+            let curStokeWidth = 2;
+            let curStrokeColor = 'black';
+            let curFillColor = 'black';
+            let fillNone = true;
 
-                    console.log('paint');
+            let beginX, beginY;
+            let lastX, lastY;
+
+
+            canvas.addEventListener('mousedown', function(ev) {
+                painting = true;
+                const x = ev.offsetX;
+                const y = ev.offsetY;
+                beginX = x;
+                beginY = y;
+                lastX = x;
+                lastY = y;
+                switch (shapeType) {
+                    case 'path':
+                    case 'close-path':
+                        {
+                            let path = new Path(canvas);
+                            shapeContainer.push(path);
+                            path.push(x, y);
+                            path.strokeWidth(curStokeWidth);
+                            path.strokeColor(curStrokeColor);
+
+                            if (shapeType == 'close-path') {
+                                path.closePath(true);
+                                if (!fillNone) {
+                                    path.fillColor(curFillColor);
+                                } else {
+                                    path.fillColor('rgba(0,0,0,0)');
+                                }
+                            } else {
+                                path.closePath(false);
+                            }
+
+                            break;
+                        }
+                    case 'rect':
+                        {
+                            let rect = new Rect(canvas);
+                            shapeContainer.push(rect);
+                            rect.setXY(x, y);
+                            rect.strokeWidth(curStokeWidth);
+                            rect.strokeColor(curStrokeColor);
+                            if (!fillNone) {
+                                rect.fillColor(curFillColor);
+                            } else {
+                                rect.fillColor('rgba(0,0,0,0)');
+                            }
+                            break;
+                        }
+                    case 'circle':
+                        {
+                            let circle = new Circle(canvas);
+                            shapeContainer.push(circle);
+                            circle.setCenter(x, y);
+                            circle.strokeWidth(curStokeWidth);
+                            circle.strokeColor(curStrokeColor);
+                            if (!fillNone) {
+                                circle.fillColor(curFillColor);
+                            } else {
+                                circle.fillColor('rgba(0,0,0,0)');
+                            }
+                            break;
+                        }
+                    default:
+                        break;
                 }
-            },false);
+                shapeContainer.render();
+            }, false);
 
-            oCanvasPaint.addEventListener('mouseup', function(ev) {
-                painterOn = false;
-                console.log('end');
-            },false);
-            
+            canvas.addEventListener('mousemove', function(ev) {
+                if (!painting) {
+                    return;
+                }
 
-            
-            document.getElementById('btn-clean').onclick = function () {
-                oCanvasPaintContext.clearRect(0, 0, oCanvasPaint.offsetHeight, oCanvasPaint.offsetHeight);
+                let shape = shapeContainer.rear();
+                if (!shape) {
+                    return;
+                }
+                const x = ev.offsetX;
+                const y = ev.offsetY;
+
+                switch (shapeType) {
+                    case 'path':
+                    case 'close-path':
+                        {
+                            shape.push(x, y);
+                            break;
+                        }
+                    case 'rect':
+                        {
+                            shape.setSize(x - beginX, y - beginY);
+                            break;
+                        }
+                    case 'circle':
+                        {
+                            let dis = Math.sqrt((x-beginX)*(x-beginX) + (y-beginY)*(y-beginY)); 
+                            shape.setRadius(dis);
+                            break;
+                        }
+                }
+
+                lastX = x;
+                lastY = y;
+
+                shapeContainer.render();
+            }, false);
+
+            canvas.addEventListener('mouseup', function(ev) {
+                painting = false;
+                shapeContainer.render();
+            }, false);
+
+            document.getElementById('btn-clean').onclick = function() {
+                shapeContainer.clear();
+                shapeContainer.render();
             }
 
 
             //全局的mouse
             window.addEventListener('mouseup', function() {
-                painterOn= false;
-            },false);
-        };
+                painting = false;
+            }, false);
+
+            let btns = $('#div1 .btn-group');
+            Array.from(btns).forEach(ele => {
+                ele.onclick = function() {
+                    $(this).removeClass('btn-group').addClass('btn-success')
+                        .siblings().removeClass('btn-success').addClass('btn-group');
+                    shapeType = $(this).val();
+                };
+            });
+
+            $('#line-width').change(function() {
+                curStokeWidth = parseInt(this.value);
+            });
+
+            $('#stroke-color').change(function() {
+                curStrokeColor = this.value;
+            });
+
+            $('#fill-color').change(function() {
+                curFillColor = this.value;
+            });
+
+            $('#fill-none').change(function() {
+                fillNone = this.checked;
+            });
+        }
     </script>
 </head>
-<body>
-    <h2>Canvas Freehand</h2>
-    <div class="panel">
-        <input type="button" value="clean" id="btn-clean">
-        <input type="button" value="四边形">
-        <input type="button" value="四边形">
 
+<body>
+    <h2>Canvas Painter</h2>
+    <div class="panel">
+        <div id="div0">
+            <input type="button" value="clean" id="btn-clean">
+        </div>
+        <br>
+        <div id="div1">
+            <input type="button" class="btn-group" value="path">
+            <input type="button" class="btn-group" value="close-path">
+            <input type="button" class="btn-group" value="rect">
+            <input type="button" class="btn-group" value="circle">
+        </div>
+        <br>
+        <div>
+            StrokeWidth:<input type="range" min="1" max="20" value="2" step="1" id="line-width"> StrokeColor:
+            <input type="color" value="#000000" id="stroke-color"> FillColor:
+            <input type="color" value="#000000" id="fill-color"> FillNone:
+            <input type="checkbox" checked="false" id="fill-none">
+        </div>
     </div>
     <div class="box">
-        <canvas width="500" height="500" id="canvas-paint">
-        </canvas>
-    </div>
-    <div class="box">
-        <canvas width="500" height="500" id="canvas2">
+        <canvas width="800" height="800" id="canvas-paint">
         </canvas>
     </div>
 </body>
+
 </html>
