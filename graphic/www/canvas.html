@@ -31,6 +31,7 @@
             let canvas = document.getElementById('canvas-paint');
             let cxt = canvas.getContext('2d');
             let painting = false;
+            let moving = false;
 
             //shape container
             let shapeContainer = new ShapeContainer(canvas);
@@ -53,6 +54,12 @@
                 lastX = x;
                 lastY = y;
                 switch (shapeType) {
+                    case '': 
+                    {
+                        painting = false;
+                        moving = shapeContainer.hit(x,y) != null;
+                        break;    
+                    }
                     case 'path':
                     case 'close-path':
                         {
@@ -110,7 +117,18 @@
             }, false);
 
             canvas.addEventListener('mousemove', function(ev) {
-                if (!painting) {
+                const x = ev.offsetX;
+                const y = ev.offsetY;
+
+                if (!painting && !moving) {
+                    return;
+                }
+
+                if (moving) {
+                    shapeContainer.move(x,y);
+                    lastX = x;
+                    lastY = y;
+                    shapeContainer.render();
                     return;
                 }
 
@@ -118,9 +136,7 @@
                 if (!shape) {
                     return;
                 }
-                const x = ev.offsetX;
-                const y = ev.offsetY;
-
+                
                 switch (shapeType) {
                     case 'path':
                     case 'close-path':
@@ -149,6 +165,10 @@
 
             canvas.addEventListener('mouseup', function(ev) {
                 painting = false;
+                if (moving) {
+                    shapeContainer.clearHit();
+                    moving = false;
+                }
                 shapeContainer.render();
             }, false);
 
@@ -166,9 +186,15 @@
             let btns = $('#div1 .btn-group');
             Array.from(btns).forEach(ele => {
                 ele.onclick = function() {
-                    $(this).removeClass('btn-group').addClass('btn-success')
+                    if ($(this).hasClass('btn-success')) {
+                        $(this).removeClass('btn-success').addClass('btn-group');
+                        shapeType ='';
+                    } else {
+                        $(this).removeClass('btn-group').addClass('btn-success')
                         .siblings().removeClass('btn-success').addClass('btn-group');
-                    shapeType = $(this).val();
+                        shapeType = $(this).val();
+                    }
+                    
                 };
             });
 
