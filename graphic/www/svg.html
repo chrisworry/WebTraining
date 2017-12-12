@@ -1,14 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <style>
+        .btn-group {
+            background: rgba(231, 227, 227, 0.8)
+        }
+
+        .btn-success {
+            background: rgba(119, 118, 116, 0.8)
+        }
+    </style>
+    <script src="js/jquery.js" charset="utf-8"></script>
+    <script src="js/svg.js" charset="utf-8"></script>
+    <script>
+        window.onload = function () {
+            let oSVG = document.getElementById('svg');
+            let painting = false;
+            let shapeType = '';
+            let lastX, lastY;
+            let beginX, beginY;
+
+            let curStokeWidth = 2;
+            let curStrokeColor = 'black';
+            let curFillColor = 'red';
+            let fillNone = true;
+
+            let svgContainer = new SVGContainer(oSVG);
+
+            let paintItem = '';
+            $('#svg').mousedown(function (ev) {
+                const x = ev.offsetX;
+                const y = ev.offsetY;
+                lastX = x;
+                lastY = y;
+                beginX = x;
+                beginY = y;
+                painting = shapeType != '';
+                if (painting) {
+                    switch (shapeType) {
+                        case 'path':
+                        case 'close-path':
+                            {
+                                let path = new Path(oSVG);
+                                svgContainer.push(path);
+                                path.push(x, y);
+                                path.close(shapeType == 'close-path');
+                                path.strokeColor(curStrokeColor);
+                                path.fillColor(curFillColor);
+                                path.strokeWidth(curStokeWidth);
+                                if (!fillNone) {
+                                    path.fillColor('rgba(0,0,0,0)');
+                                }
+                                break;
+                            }
+                        default:
+                            break;
+                    }
+                } else {
+                    
+                }
+
+
+            }).mousemove(function (ev) {
+                const x = ev.offsetX;
+                const y = ev.offsetY;
+
+                if (painting) {
+                    switch (shapeType) {
+                        case 'path':
+                        case 'close-path':
+                            {
+                                let shape = svgContainer.rear();
+                                shape.push(x, y);
+                            }
+                        default:
+                            break;
+                    }
+                    svgContainer.update();
+                } else {
+                    svgContainer.update();
+                }
+
+                lastX = x;
+                lastY = y;
+
+            }).mouseup(function () {
+                painting = false;
+                //svgContainer.update();
+            });
+
+            $('#btn-clean').click(function () {
+                svgContainer.clean();
+            });
+
+            //全局的mouse
+            window.addEventListener('mouseup', function () {
+                painting = false;
+            }, false);
+
+            let btns = $('#div1 .btn-group');
+            Array.from(btns).forEach(ele => {
+                ele.onclick = function () {
+                    if ($(this).hasClass('btn-success')) {
+                        $(this).removeClass('btn-success').addClass('btn-group');
+                        shapeType = '';
+                        svgContainer.hitOn();
+                    } else {
+                        $(this).removeClass('btn-group').addClass('btn-success')
+                            .siblings().removeClass('btn-success').addClass('btn-group');
+                        shapeType = $(this).val();
+                        svgContainer.hitClose();
+                    }
+
+                };
+            });
+
+            $('#line-width').change(function () {
+                curStokeWidth = parseInt(this.value);
+            });
+
+            $('#stroke-color').change(function () {
+                curStrokeColor = this.value;
+            });
+
+            $('#fill-color').change(function () {
+                curFillColor = this.value;
+            });
+
+            $('#fill-none').change(function () {
+                fillNone = this.checked;
+            });
+
+        };
+    </script>
 </head>
+
 <body>
+    <h2>SVG Painter</h2>
+    <div id="div0">
+        <input type="button" value="clean" id="btn-clean">
+    </div>
+    <br>
+    <div id="div1">
+        <input type="button" class="btn-group" value="path">
+        <input type="button" class="btn-group" value="close-path">
+        <input type="button" class="btn-group" value="rect">
+        <input type="button" class="btn-group" value="circle">
+    </div>
+    <br>
     <div>
-        
+        StrokeWidth:
+        <input type="range" min="1" max="20" value="2" step="1" id="line-width"> StrokeColor:
+        <input type="color" value="#000000" id="stroke-color"> FillColor:
+        <input type="color" value="#FF0000" id="fill-color"> FillNone:
+        <input type="checkbox" checked="false" id="fill-none">
+    </div>
+    <div>
+        <svg id="svg" width="800" height="800" style="border:2px solid black"></svg>
     </div>
 </body>
+
 </html>
