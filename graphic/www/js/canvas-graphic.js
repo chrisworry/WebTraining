@@ -282,5 +282,17 @@ class ShapeContainer {
             ele.move(x,y);
         });
     }
-
 };
+
+function histogram(data) {
+    let hist = [];
+    for (let i=0; i<255; ++i) {
+        hist.push(0);
+    }
+
+    for (let i=0; i<data.length/4; ++i) {
+        hist[data[i*4]] +=1;
+    }
+
+    return hist;
+}
