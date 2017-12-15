@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="js/d3.js" charset="utf-8"></script>
+    <title>Document</title>
+    <script>
+        window.onload = function() {
+            let svg = d3.select('body')
+            .append('svg')
+            .attr('width',800)
+            .attr('height',800)
+            .style('border','1px solid black');
+
+            let g = d3.select('svg').append('g');
+
+            let datas = [
+                {name:'不及格', value:68},
+                {name:'及格', value:278},
+                {name:'优秀', value:25},
+                {name:'满分', value:5}
+            ];
+            
+            //1 计算
+            //1.1 创建生成器(角度 坐标)
+            let pie = d3.pie()
+            .value(item=>item.value);
+
+            //1.2 用pie生成器计算 角度
+            let pieRes = pie(datas);
+            console.log(pieRes);
+
+            //1.3 用arc生成器计算 坐标 
+            let rnd = d3.randomUniform(0,100);
+            pieRes.forEach(pieData => {
+                let arc = d3.arc()
+                .innerRadius(100)
+                .outerRadius(150);
+
+                let arcRes = arc(pieData);
+                g.append('path')
+                .attr('d',arcRes)
+                .style('stroke','black')
+                .style('stroke-width','4')
+                .style('fill',d3.color(`rgb(${rnd()}%,${rnd()}%,${rnd()}%)`));
+            });
+
+            g.attr('transform', 'translate(400,300) rotate(30)');
+
+        }
+        
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

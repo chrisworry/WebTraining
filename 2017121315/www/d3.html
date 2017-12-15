@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="js/d3.js" charset="utf-8"></script>
+    <title>Document</title>
+    <script>
+        window.onload = function() {
+            console.log(d3.extent([1,2,3,12,45,123]));    
+            
+            console.log(d3.color('red'));
+            console.log(d3.color('rgba(255,0,0,0.3)'));
+
+            let map = d3.map([{name:'blue',age:18},{name:'alex',age:18},{name:'tom',age:18}],item=>item.name);
+            console.log(map.get('blue'));
+
+            let set = d3.set([{name:'blue',age:18},{name:'alex',age:18},{name:'tom',age:18}],item=>item.name);
+            console.log(set.has('alex'));
+            console.log(set.has('coco'));
+
+            ///数字格式化
+            //创建format生成器
+            let gen = d3.format('.3f');
+            //用生成器来处理数据
+            console.log(gen(128));
+
+            //时间格式化
+            let gen2 = d3.timeFormat('%Y年%m月%d日-%H:%M:%S');
+            console.log(gen2(Date.now()));
+
+            ///////////////////////////////////////////////
+            //随机数
+            let rnMean = d3.randomUniform();//均值分布=Math.random()
+            //let rnMean = d3.randomUniform(min，max)；
+            for (let i=0;i<10;++i) {
+                console.log(rnMean());
+            }
+            
+            let rnGauss = d3.randomNormal();//高斯/正态分布
+            //let rnGauss = d3.randomNormal(mu,sigma);//高斯/正态分布
+            for (let i=0;i<10;++i) {
+                console.log(rnGauss());
+            }
+            ///////////////////////////////////////////////
+
+            //异步任务队列
+            //创建队列
+            let queue = d3.queue();
+            //添加任务
+            queue.defer(function(a,b,cb){
+                setTimeout(function() {
+                    cb(null,a+b);
+                },500);
+            },12,23);
+
+            queue.defer(function(num,cb){
+                setTimeout(function() {
+                    cb(null,num*5);
+                },1000);
+            },12);
+
+            //等待完成
+            // queue.await(function(err,...args) {
+            //     console.log(err);
+            //     console.log(args);
+            // });
+
+            queue.await(function(err,result1,result2) {
+                console.log(err);
+                console.log(result1,result2);
+            });
+
+            ///////////////////////////////////////////////
+            //DOM 操作 不能一次赋值多个属性，即不支持JSON的形式赋值
+            let div = d3.select('body')
+            .append('svg')
+            .attr('width',800)
+            .attr('height',800)
+            .append('path')
+            .attr('d','M 400 400 L 300 400')
+            .attr('stroke','red')
+            .attr('fill','none');
+
+        }
+        
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

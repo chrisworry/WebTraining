@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="js/d3.js" charset="utf-8"></script>
+    <title>Document</title>
+    <script>
+        window.onload = function() {
+            let datas = [
+                {name:'1月', value:123},
+                {name:'2月', value:1234},
+                {name:'3月', value:123},
+                {name:'4月', value:1234},
+                {name:'5月', value:123},
+                {name:'6月', value:1234},
+                {name:'7月', value:123},
+                {name:'8月', value:1234},
+                {name:'9月', value:123},
+                {name:'10月', value:1234},
+                {name:'11月', value:123},
+                {name:'12月', value:1234},
+            ];
+            
+            //1 计算
+            //1.1 创建生成器
+            let lineGen = d3.line()
+            .x(item=>(parseInt(item.name)-1)*50)
+            .y(item=>1234-item.value);
+
+            //1.2 用生成器计算 
+            let res = lineGen(datas);
+
+            //2 创建图形显示数据
+            d3.select('body')
+            .append('svg')
+            .style('border','1px solid black')
+            .attr('width',800)
+            .attr('height',800)
+            .append('path')
+            .attr('d',res)
+            .attr('stroke','black')
+            .attr('fill','none');
+
+        }
+        
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
