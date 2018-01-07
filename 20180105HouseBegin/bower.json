@@ -1,0 +1,17 @@
+{
+  "name": "20180105housebegin",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "chrisworry <wangrui22bd@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/chrisworry/WebTraining",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
