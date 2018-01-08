@@ -1,0 +1,20 @@
+{
+  "name": "house",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "wangrui22 <worry_wang@163.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/chrisworry/WebTraining",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "bootstrap": "^3.3.7"
+  }
+}
