@@ -125,7 +125,27 @@ router.post('/:table', (req,res)=>{
     const {table} = req.params;
     //修改
     if(req.body.is_mod && req.body.is_mod == 'true') {
-        
+        let update_List = [];
+        let updateID = req.body['old_id'];
+        if (!updateID) {
+            res.sendStatus(404);
+        }
+
+        for (attr in req.body) {
+            if (attr != 'is_mod' && attr != 'old_id' && attr != 'ID' && req.body[attr]) {
+                update_List.push(attr + "='" + req.body[attr] + "'");
+            }
+        }
+        update_List = update_List.join(',')
+        let sql = `UPDATE ${table}_table SET ${update_List} WHERE ID='${updateID}'`;
+        req.db.query(sql, (err)=>{
+            if (err) {
+                console.log(err);
+                res.sendStatus(500);
+            } else {
+                res.redirect(`/admin/${table}`);
+            }
+        });
     }
     //添加
     else{
@@ -150,4 +170,22 @@ router.post('/:table', (req,res)=>{
         });
     }
 
+});
+
+//修改项目获取数据
+router.post('/:table/get_data', (req,res)=>{
+    const {table} = req.params;
+    const {id} = req.body;
+    req.db.query(`SELECT * FROM ${table}_table WHERE ID='${id}'`, (err,data)=>{
+        if (err) {
+            console.log(err);
+            res.sendStatus(500);
+        } else if(data.length == 0) {
+            res.sendStatus(404);
+        } else {
+            res.send(data[0]);
+            res.end();
+        }
+    })
+    console.log(id);
 });

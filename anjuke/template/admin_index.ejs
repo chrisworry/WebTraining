@@ -96,7 +96,7 @@
                                 <td><%=ele[attr]%></td>
                             <%}%> 
                             <td>
-                                <a href="javascript:;">编辑</a>
+                                <a href="javascript:;" onclick="modfiy_data('<%=ele.ID%>')">编辑</a>
                                 <a href="javascript:;">删除</a>
                             </td>
                         </tr>
@@ -163,6 +163,25 @@
             }
         }
     };
+
+    function modfiy_data(id) {
+        $.ajax({
+            url:'/admin/<%=table%>/get_data',
+            data: {id},
+            dataType: 'json',
+            method: 'post',
+            error(err) {
+                alert('数据没找到，请刷新重试');
+            },
+            success(data) {
+                oShadow.style.display = 'block';
+                oDialog.style.display = 'block';
+                createForm(data);
+                $('#is_mod')[0].value = 'true';
+                $('#old_id')[0].value = id;
+            },
+        });
+    }
 
     oAddBtn.onclick = function() {
         oShadow.style.display = 'block';
