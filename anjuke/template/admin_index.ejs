@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="/js/jquery.js" charset="utf-8"></script>
+    <script src="/js/bootstrap.js" charset="utf-8"></script>
+    <script src="/js/table_modified_item.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+
+<body>
+    <div class="page-wrap">
+        <div class="page-menu">
+            <ul class="nav nav-pills nav-stacked" id="nav">
+                <li role="presentation" title="house">
+                    <a href="/admin/house" target="_self">房源</a>
+                </li>
+                <li role="presentation" title="link">
+                    <a href="/admin/link" target="_self">友情链接管理</a>
+                </li>
+                <li role="presentation" title="ad">
+                    <a href="/admin/ad" target="_self">广告管理</a>
+                </li>
+                <li role="presentation" title="broker">
+                    <a href="/admin/broker" target="_self">经纪人管理</a>
+                </li>
+            </ul>
+        </div>
+        <div class="page-content">
+            <!-- 新建 删除 搜索 -->
+            <div class="navbar navbar-default">
+                <form class="navbar-form navbar-left" action="?" method="get">
+                    <div class="form-group" style="margin-right:20px;">
+                        <button id="btn_add" type="button" class="btn btn-default glyphicon glyphicon-plus">新建</button>
+                    </div>
+                    <div class="form-group" style="margin-right:20px;">
+                        <button id="btn_del" type="button" class="btn btn-default glyphicon glyphicon-remove">删除</button>
+                    </div>
+                    <div class="form-group">
+                        <input type="search" class="form-control" name="keyword">
+                        <button type="submit" class="btn btn-default">搜索</button>
+                    </div>
+                </form>
+            </div>
+            <!-- 页码 -->
+            <nav aria-label="Page navigation">
+                <ul class="pagination margin-0">
+                    <li>
+                        <a href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <%for(let i=1; i<sum_page+1; ++i){%>
+                    <li>
+                    <a href="#"><%=i%></a>
+                    </li>
+                    <%}%>
+                    <li>
+                        <a href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <!-- 内容 -->
+            <table class="table">
+                    <thead>
+                      <tr>
+                        <th width="300">
+                          <label>
+                            <input type="checkbox">
+                            ID
+                          </label>
+                        </th>
+                        <%title_list.forEach(ele=>{%>
+                            <%if (ele != 'ID') {%>
+                            <th ><%=ele%></th>
+                            <%}%>
+                        <%});%>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <%data_list.forEach(ele=>{%>
+                        <tr>
+                            <td>
+                                <label><input type="checkbox"><%=ele.ID%></label>
+                            </td> 
+                            <%for (attr in ele) {%>
+                                <%if (attr == 'ID') continue;%>
+                                <td><%=ele[attr]%></td>
+                            <%}%> 
+                            <td>
+                                <a href="javascript:;">编辑</a>
+                                <a href="javascript:;">删除</a>
+                            </td>
+                        </tr>
+                        <%});%>
+                    </tbody>
+            </table>
+
+        </div>
+    </div>
+
+    <div id="shadow" class="shadow"></div>
+    <div id="dialog" class="panel panel-default add_modify_dialog">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          添加/修改
+          <a id="btn_close" href="#" class="pull-right glyphicon glyphicon-remove"></a>
+        </h3>
+      </div>
+      <div class="panel-body" style="overflow:auto; height:460px;">
+        <form id="data_form" class="form-horizontal" action="?" method="post" enctype="multipart/form-data">
+          <input type="hidden" id="is_mod" name="is_mod" value="false">
+          <input type="hidden" id="old_id" name="old_id" value="">
+
+          <div id="form_contrainer"></div>
+          <div class="form-group">
+            <div class="col-sm-10 col-sm-offset-2">
+              <button type="submit" class="btn btn-primary">提交</button>
+              <button id="btn_cancel" type="button" class="btn btn-danger">取消</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+</body>
+
+<script>
+    let oShadow = $('#shadow')[0];
+    let oDialog = $('#dialog')[0];
+    let oAddBtn = $('#btn_add')[0];
+    let oDeleteBtn = $('#btn_delete')[0];
+    let oBtnClose = $('#btn_close')[0];
+    let oDialogCancel = $('#btn_cancel')[0];
+    
+    const table_modified_item = table_list['<%=table%>'];
+
+    function createForm(old_data={}) {
+        let oFormContainer=$('#form_contrainer')[0];
+        oFormContainer.innerHTML = '';
+        for (let i=0; i<table_modified_item.length; ++i) {
+            let data = table_modified_item[i];
+
+            let oDiv = document.createElement('div');
+            oDiv.innerHTML = '';
+            oDiv.className = 'form-group';
+            oDiv.innerHTML = `
+            <label for="id${i}" class="col-sm-2 control-label">${data.title}</label>
+            <div class="col-sm-10">
+                <input type="${data.type}" ${data.multiple?'multiple':''} class="form-control" name="${data.name}" id="id${i}" placeholder="请输入${data.title}..." value="${old_data[data.name]||''}">
+            </div>`;
+            oFormContainer.appendChild(oDiv);
+
+            if (data.type == 'date') {
+
+            }
+        }
+    };
+
+    oAddBtn.onclick = function() {
+        oShadow.style.display = 'block';
+        oDialog.style.display = 'block';
+        createForm();
+        $('#is_mod')[0].value = 'false';
+    };
+
+    oDialogCancel.onclick = oBtnClose.onclick = function() {
+        oShadow.style.display = 'none';
+        oDialog.style.display = 'none';
+    }
+
+</script>
+
+</html>
