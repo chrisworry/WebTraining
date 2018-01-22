@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,64 +8,77 @@
     <title>Document</title>
     <script src="js/jquery.js"></script>
     <script src="js/image.js"></script>
+    <style>
+        .content {width:800px; height:600px; border:1px solid black; margin:0 auto;overflow:hidden;}
+    </style>
     <script>
-        window.onload = function() {
+        window.onload = function () {
             let canvas = document.getElementById('canvas');
             let ctx = canvas.getContext('2d');
 
             function load() {
                 let fileReader = new FileReader();
-                fileReader.onload = function() {
+                fileReader.onload = function () {
                     let res = this.result;
                     let img = new Image();
-                    img.onload = function() {
+                    img.onload = function () {
                         canvas.width = img.width;
                         canvas.height = img.height;
-                        $('.box').css('width',`${img.width}px`).css('height',`${img.height}px`);
-                        ctx.clearRect(0,0,canvas.width,canvas.height);
-                        ctx.drawImage(img,0,0,canvas.width,canvas.height);
+                        $('.box').css('width', `${img.width}px`).css('height', `${img.height}px`);
+                        $('.content').css('width', `${img.width+400}px`).css('height', `${img.height}px`);
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                     }
                     img.src = res;
                 }
                 let file = document.getElementById('btn-file').files[0];
                 fileReader.readAsDataURL(file);
             }
-            $('#btn-load').click(function() {
+            $('#btn-load').click(function () {
                 load();
             });
 
-            $('#btn-rest').click(function() {
+            $('#btn-rest').click(function () {
                 load();
             });
 
-            $('#btn-gray').click(function() {
-                let imgData = ctx.getImageData(0,0,canvas.width,canvas.height);
+            $('#btn-gray').click(function () {
+                let imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                 let data = imgData.data;
-                let r,g,b,a,gray;
-                for (let i=0;i<data.length/4; ++i) {
-                    r = data[i*4];
-                    g = data[i*4+1];
-                    b = data[i*4+2];
-                    gray=(r*30+g*59+b*11)/100;
-                    data[i*4] = gray;
-                    data[i*4+1] = gray;
-                    data[i*4+2] = gray;
+                let r, g, b, a, gray;
+                for (let i = 0; i < data.length / 4; ++i) {
+                    r = data[i * 4];
+                    g = data[i * 4 + 1];
+                    b = data[i * 4 + 2];
+                    gray = (r * 30 + g * 59 + b * 11) / 100;
+                    data[i * 4] = gray;
+                    data[i * 4 + 1] = gray;
+                    data[i * 4 + 2] = gray;
                 }
-                ctx.putImageData(imgData,0,0);
+                ctx.putImageData(imgData, 0, 0);
             });
         }
     </script>
 </head>
+
 <body>
     <h2>Image filter</h2>
     <div id="btn-groups">
         <input type="file" id="btn-file">
-        <input type="button" value = "load" id="btn-load"><br>
-        <input type="button" value = "rest" id="btn-rest">
-        <input type="button" value = "gray" id="btn-gray">
+        <input type="button" value="load" id="btn-load">
+        <br>
+        <input type="button" value="rest" id="btn-rest">
+        <input type="button" value="gray" id="btn-gray">
     </div>
-    <div class="box">
-        <canvas width="800" height="800" id="canvas"></canvas>
+    <div id="content">
+        <div class="box">
+            <canvas width="800" height="800" id="canvas"></canvas>
+        </div>
+        <div class="hist">
+
+        </div>
     </div>
+
 </body>
+
 </html>

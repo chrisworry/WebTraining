@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body {background: black ; text-align: center}
+        canvas {background:url(img/game_bg_2_hd.jpg) no-repeat}
+    </style>
+    <script src="js/util.js" charset="utf-8"></script>
+    <script src="js/resource.js" charset="utf-8"></script>
+    <script src="js/object.js" charset="utf-8"></script>
+    <script src="js/main-logic.js" charset="utf-8"></script>
+    <script>
+        window.onload = function() {
+            let canvas = document.getElementById('c1');
+            let ctx = canvas.getContext('2d');
+            let main = new MainLogic(resource, canvas);
+            resource.load(function() {
+                main.run();
+                //alert('image load done');
+                
+                // let obj = new ImgWrapper(resource.FISH[0].img, 
+                // 0,0,resource.FISH[0].img.width, resource.FISH[0].dH);
+                // obj.draw(canvas,100,100,180);
+
+                // let bottom = new Bottom();
+                // bottom.draw(canvas);
+            });
+        }
+    </script>
+</head>
+<body>
+    <canvas width="800" height="600" id="c1"></canvas>
+</body>
+</html>

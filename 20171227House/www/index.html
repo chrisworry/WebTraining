@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+        <form action="http://localhost:8080/login" method="get" enctype="application/x-www-form-urlencoded">
+            用户名<input type="text" name="user"><br>
+            密码<input type="password" name="pass"><br>
+            <input type="submit" value="登陆">
+        </form>
+    <form action="http://localhost:8080/login" method="post" enctype="application/x-www-form-urlencoded">
+        用户名<input type="text" name="user"><br>
+        密码<input type="password" name="pass"><br>
+        <input type="submit" value="登陆">
+    </form>
+    <br>
+    <form action="http://localhost:8080/login2" method="post" enctype="multipart/form-data" >
+        用户名<input type="text" name="user"><br>
+        密码<input type="password" name="pass"><br>
+        头像<input type="file" name="file1">
+        <input type="submit" value="登陆">
+    </form>
+</body>
+</html>

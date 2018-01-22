@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="js/d3.js" charset="utf-8"></script>
+    <title>Document</title>
+    <script>
+        window.onload = function () {
+
+            let oC = document.getElementById('c1');
+            let ctx = oC.getContext('2d');
+
+            let nodes = [{
+                    name: 'n1'
+                },
+                {
+                    name: 'n2'
+                },
+                {
+                    name: 'n3'
+                },
+            ];
+
+            let links = [{
+                    source: 'n1',
+                    target: 'n2',
+                    value: 300
+                },
+                {
+                    source: 'n2',
+                    target: 'n3',
+                    value: 400
+                },
+                {
+                    source: 'n3',
+                    target: 'n1',
+                    value: 500
+                }
+            ];
+
+            let sim = d3.forceSimulation()
+                .nodes(nodes)
+                .force('link', d3.forceLink(links).id(item => item.name).distance(item => item.value))
+                .force('charge', d3.forceManyBody())
+                .force('center', d3.forceCenter(oC.width / 2, oC.height / 2));
+
+            sim.on('tick', () => {
+                ctx.clearRect(0, 0, oC.width, oC.height);
+
+
+                links.forEach(ele => {
+                    ctx.beginPath();
+                    ctx.moveTo(ele.source.x, ele.source.y);
+                    ctx.lineTo(ele.target.x, ele.target.y);
+                    ctx.strokeStyle = '#999';
+                    ctx.stroke();
+                });
+
+                nodes.forEach(ele => {
+                    ctx.beginPath();
+                    ctx.arc(ele.x, ele.y, 3, 0, Math.PI * 2, true);;
+                    ctx.fillStype = 'black';
+                    ctx.fill();
+
+                    ctx.fillText(ele.name, ele.x, ele.y);
+                });
+
+
+            })
+            //console.log(sim);
+
+
+
+        }
+    </script>
+</head>
+
+<body>
+    <canvas id="c1" width="800" height="600" style="border:1px solid black"></canvas>
+</body>
+
+</html>
