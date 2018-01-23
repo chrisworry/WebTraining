@@ -1,12 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <script src="/js/jquery.js" charset="utf-8"></script>
+    
 </head>
+
 <body>
-    hello  koa
+    user<input type="text" id="user"><br> password
+    <input type="password" id="pass">
+    <input type="button" value="submit" id="btn1">
 </body>
+
+<script>
+        function getJSON(user, pass) {
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    url: `http://localhost:8080/reg?user=${user}&pass=${pass}`,
+                    type: 'GET',
+                    dataType: 'json',
+                    success(data) {
+                        resolve(data);
+                    },
+                    error(err) {
+                        reject(err);
+                    }
+                });
+            });
+        }
+
+        function postJSON(user, pass) {
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    url: `http://localhost:8080/reg`,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {'user':user, 'pass':pass},
+                    success(data) {
+                        resolve(data);
+                    },
+                    error(err) {
+                        reject(err);
+                    }
+                });
+            });
+        }
+        
+        $('#btn1').click(function() {
+            const user = $('#user').val();
+            const pass = $('#pass').val();
+            postJSON(user,pass).catch(err=>{
+                alert('通讯失败:' + err);
+            }).then(data=>{
+                if (0 != data.err) {
+                    alert('失败:' + data.msg);
+                } else {
+                    alert('成功:' + data.msg);
+                }
+            });
+        });
+
+    </script>
 </html>

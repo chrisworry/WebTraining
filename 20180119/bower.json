@@ -1,0 +1,17 @@
+{
+  "name": "20180119",
+  "description": "",
+  "main": "promise.js",
+  "authors": [
+    "wangrui22 <wangrui22@baidu.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/chrisworry/WebTraining",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
