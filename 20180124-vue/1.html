@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="vue.js" charset="utf-8"></script>
+    <script>
+        window.onload = function() {
+            let vm = new Vue({
+                el: '#div1',
+                data: {
+                    a:12,
+                    b:5,
+                    arr:[
+                        {name:'wr',age:18},
+                        {name:'wr2',age:19},
+                        {name:'wr3',age:20},
+                    ]
+                },
+                methods: {
+                    fn() {
+                        alert(this.a);
+                    }
+                }
+            });
+
+            setInterval(function() {
+                vm.a+=1;
+            },1000);
+        }
+    </script>
+</head>
+<body>
+    <h2>hello Vue</h2>
+    <div id="div1" v-bind:title="a">
+        {{a+b}}
+        <input type="button" value="reset" v-on:click="a=12"><br>
+        <input type="button" value="alert" v-on:click="fn"><br>
+        <input type="button" value="alert" @click="fn"><br>
+        <input type="text" v-model="a"><br>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>name</th>
+                    <th>age</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="json in arr">
+                    <td>{{json.name}}</td>
+                    <td>{{json.age}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+</body>
+</html>
