@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="vue.js" charset="utf-8"></script>
+    <script>
+        window.onload = function() {
+            //修饰符
+
+
+            let vm = new Vue({
+                el: '#fomr1',
+                methods: {
+                    fn() {
+                        alert('提交了');
+                    }
+                }
+            })
+        }
+            
+    </script>
+</head>
+<body>
+    <h2>hello Vue</h2>
+    <form id="fomr1" action="index.html" @submit.prevent="fn">
+        <input type="text">
+        <input type="submit" value="提交">
+    </form>
+</body>
+</html>

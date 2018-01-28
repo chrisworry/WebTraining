@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="vue.js" charset="utf-8"></script>
+    <script src="vue-router.js" charset="utf-8"></script>
+    <style>
+        /* .mylink {color:black; text-decoration: none}
+        .router-link-active {color:red} */
+    </style>
+    <script>
+        window.onload = function() {
+
+            //1 声明路由
+            let r1 = new VueRouter({
+                routes:[
+                    //component 一定有有一个顶级元素
+                    {path:'/user', component:{template:'<div>用户列表</div>'}},
+                    {path:'/article', component:{template:'<div>文章列表</div>'}},
+                    {path:'/commit', component:{template:'<div>留言列表</div>'}},
+                ],
+            });
+
+            //2 调用路由
+            let vm = new Vue({
+                el: '#div1',
+                router: r1,
+                data: {
+                    users:[
+                        {id:'3',name:'w',pass:'123456'},
+                        {id:'4',name:'w1',pass:'123456'},
+                        {id:'5',name:'w2',pass:'123456'},
+                        {id:'6',name:'w3',pass:'123456'},
+                    ]
+                },
+                methods:{
+                    fn_forward() {
+                        //window.history.go;
+                        this.$router.go(-1);
+                    },
+
+                    fn_back() {
+                        this.$router.go(1);
+                    },
+
+                    fn_push() {
+                        //等价于 <router-link to="/user">
+                        this.$router.push('/user');
+                    }
+                }
+            })
+        }
+            
+    </script>
+</head>
+<body>
+    <h2>Vue Router</h2>
+    <div id="div1">
+        <input type="button" value="前进" @click="fn_forward">
+        <input type="button" value="后退" @click="fn_back">
+        <input type="button" value="user" @click="fn_push">
+        <router-link to="/user">用户</a>
+        <router-link to="/article">文章</a>
+        <router-link to="/commit">留言</router-link>
+        <router-view></router-view>
+    </div>
+</body>
+</html>

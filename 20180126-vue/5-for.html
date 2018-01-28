@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="vue.js" charset="utf-8"></script>
+    <script>
+        window.onload = function() {
+            //修饰符
+
+
+            let vm = new Vue({
+                el: '#div1',
+                data: {
+                    arr:[1,2,3,45],
+                    json:{a:12,b:23},
+                    users:[
+                        {id:'3',name:'w',pass:'123456'},
+                        {id:'4',name:'w1',pass:'123456'},
+                        {id:'5',name:'w2',pass:'123456'},
+                        {id:'6',name:'w3',pass:'123456'},
+                    ]
+                },
+                methods: {
+                }
+            })
+        }
+            
+    </script>
+</head>
+<body>
+    <h2>hello Vue</h2>
+    <div id="div1">
+        <input type="button" value="btn" @click="fn">
+        <ul>
+            <li v-for="a,index in arr">{{index}},{{a}}</li>
+            <li v-for="val,key in json">{{key}},{{val}}</li>
+            <li v-for="i in 10">{{i}}</li>
+            <br>
+            <li v-for="json in users" :skey="json.id">{{json.name}}</li>
+        </ul>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "name": "20180126-vue",
+  "homepage": "https://github.com/chrisworry/WebTraining",
+  "authors": [
+    "chrisworry <wangrui22bd@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "vue": "^2.5.13"
+  }
+}

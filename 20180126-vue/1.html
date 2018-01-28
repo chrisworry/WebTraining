@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="vue.js" charset="utf-8"></script>
+    <script>
+        window.onload = function() {
+            let vm = new Vue({
+                el: '#div1',
+                data : {
+                    a_:1,
+                    b_:2,
+                },
+                methods: {
+
+                },
+                computed: {
+                    a:{
+                        get: function() {
+                            return this.a_;
+                        },
+                        set: function(newVal) {
+                            this.a_ = parseInt(newVal);
+                        },
+                    },
+
+                    b:{
+                        get: function() {
+                            return this.b_;
+                        },
+                        set: function(newVal) {
+                            this.b_ = parseInt(newVal);
+                        },
+                    }
+                }
+            })
+        }
+            
+    </script>
+</head>
+<body>
+    <h2>hello Vue</h2>
+    <div id="div1">
+        <!-- <label v-html="a">{{a}}</label>
+        <label >{{b}}</label> -->
+        <input type="text" v-model="a"> +
+        <input type="text" v-model="b"> = 
+        {{a+b}} 
+    </div>
+</body>
+</html>
